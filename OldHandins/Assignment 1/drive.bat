@@ -1,0 +1,1 @@
+fsi -r D:\GitHubRepoes\BPRD\Runner\ExprCMD\bin\FsLexYacc.Runtime.dll Intro2.fs

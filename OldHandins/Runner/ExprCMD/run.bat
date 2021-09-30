@@ -1,0 +1,1 @@
+fsi -r D:\GitHubRepoes\BPRD\Runner\ExprCMD\bin\FsLexYacc.Runtime.dll Absyn.fs ExprPar.fs ExprLex.fs Parse.fs Expr.fs

@@ -1,0 +1,108 @@
+------------------BEGINNING DEBUGGING SESSION FOR test1------------------
+
+Starting program: Exercise 6.3/exercise.out 
+5 :: 4 :: 3 :: 2 :: 1 :: nil
+
+Breakpoint 1, free_list (l=0x0) at exercise.c:48
+48	  free(l->tail);
+(gdb) p l
+$1 = (list *) 0x0
+(gdb) p l->tail
+Cannot access memory at address 0x8
+(gdb) quit
+A debugging session is active.
+
+	Inferior 1 [process 13853] will be killed.
+
+Quit anyway? (y or n) y
+
+---------------------END DEBUGGING SESSION FOR test1---------------------
+
+Possible Null pointer exception.
+When printing the list l then "(list *) 0x0" wich means the pointer point on the system Null mem adress. List l Should be freed So a change "free(l->tail)" to "free(l)" would help.
+
+
+
+
+------------------BEGINNING DEBUGGING SESSION FOR test2------------------
+Exercise 6.3/exercise.out 
+5 :: 4 :: 3 :: 2 :: 1 :: nil
+6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+7 :: 6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+8 :: 7 :: 6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+9 :: 8 :: 7 :: 6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00000000004006da in print_list (l=0x0) at exercise.c:37
+37	    printf("%d :: ", l->head);
+(gdb) p l
+$1 = (list *) 0x0
+(gdb) p l->head
+Cannot access memory at address 0x0
+(gdb) quit
+A debugging session is active.
+
+	Inferior 1 [process 23704] will be killed.
+
+Quit anyway? (y or n) y
+
+---------------------END DEBUGGING SESSION FOR test2---------------------
+
+Test2() is a test with the list nil() that returns a NULL value this means when print access l->head then it will return in NULL pointer exception.
+To change this a change to the do-while loop is in order to a normal while loop this will in turn make it possible to check if list is empty.
+
+------------------BEGINNING DEBUGGING SESSION FOR test3------------------
+Starting program: Exercise 6.3/exercise.out 
+5 :: 4 :: 3 :: 2 :: 1 :: nil
+6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+7 :: 6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+8 :: 7 :: 6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+9 :: 8 :: 7 :: 6 :: 5 :: 4 :: 3 :: 2 :: 1 :: nil
+
+nil
+
+
+Breakpoint 1, test3 () at exercise.c:67
+67	  list *l = nats(5);
+(gdb) s
+nats (max=5) at exercise.c:23
+23	 if (max <= 0) {
+(gdb) next
+28	    for (i = 0; i < max; i++) {
+(gdb) s
+29	      res = cons(i + 1, res);
+(gdb) p res
+$1 = (list *) 0x7ffff7a8f8b3 <_IO_new_file_overflow+243>
+(gdb) c
+Continuing.
+*** Error in Exercise 6.3/exercise.out': free(): invalid pointer: 0x00007ffff7a8f8b3 ***
+
+Program received signal SIGABRT, Aborted.
+0x00007ffff7a4bcc9 in __GI_raise (sig=sig@entry=6) at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+56	../nptl/sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+(gdb) bt
+#0  0x00007ffff7a4bcc9 in __GI_raise (sig=sig@entry=6)
+    at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+#1  0x00007ffff7a4f0d8 in __GI_abort () at abort.c:89
+#2  0x00007ffff7a88394 in __libc_message (do_abort=do_abort@entry=1, 
+    fmt=fmt@entry=0x7ffff7b96b28 "*** Error in `%s': %s: 0x%s ***\n")
+    at ../sysdeps/posix/libc_fatal.c:175
+#3  0x00007ffff7a9466e in malloc_printerr (ptr=<optimized out>, 
+    str=0x7ffff7b92c19 "free(): invalid pointer", action=1) at malloc.c:4996
+#4  _int_free (av=<optimized out>, p=<optimized out>, have_lock=0) at malloc.c:3840
+#5  0x000000000040077a in free_list (l=0x7ffff7a8f8b3 <_IO_new_file_overflow+243>) at exercise.c:45
+#6  0x0000000000400839 in test3 () at exercise.c:68
+#7  0x0000000000400882 in main (argc=1, argv=0x7fffffffdf18) at exercise.c:81
+(gdb) Quit
+A debugging session is active.
+
+	Inferior 1 [process 28403] will be killed.
+
+Quit anyway? (y or n) y
+
+---------------------END DEBUGGING SESSION FOR test3---------------------
+
+By printing res I see that it has a <_IO_new_file_overflow+243> it shows in the backtrace aswel, this is the cause of the error.
+The problem here is that res has not been allocated. to correct this we assign res nil() in nats().
+
+

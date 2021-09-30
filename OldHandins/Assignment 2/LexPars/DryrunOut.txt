@@ -1,0 +1,24 @@
+Using fromString: on 1+2*3.
+ex is: Prim ("+",CstI 1,Prim ("*",CstI 2,CstI 3)) 
+
+Using fromString: on 1-2-3.
+ex1 is: Prim ("-",Prim ("-",CstI 1,CstI 2),CstI 3) 
+
+Using fromString: on 1+-2.
+ex2 is: Prim ("+",CstI 1,CstI -2) 
+
+Using fromString: on let z = (17) in z + 2*3end
+ex6 is: Let ("z",CstI 17,Prim ("+",Var "z",Prim ("*",CstI 2,CstI 3))) 
+
+Using fromString: on 1 + let x=5 in let y=7+x in y+y end + x end
+ex9 is: Prim
+  ("+",CstI 1,
+   Let
+     ("x",CstI 5,
+      Prim
+        ("+",Let ("y",Prim ("+",CstI 7,Var "x"),Prim ("+",Var "y",Var "y")),
+         Var "x"))) 
+
+ex10 is: [SCstI 1; SCstI 5; SCstI 7; SVar 1; SAdd; SVar 0; SVar 1; SAdd; SSwap; SPop;
+ SVar 1; SAdd; SSwap; SPop; SAdd] 
+

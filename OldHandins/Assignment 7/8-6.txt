@@ -1,0 +1,17 @@
+-----
+TEST
+-----
+MicroC fil: switchTest.c
+
+compileToFile(fromFile "switchTest.c")"switchTest.out";;
+val it : Machine.instr list =
+  [LDARGS; CALL (2,"L1"); STOP; Label "L1"; INCSP 1; GETBP; CSTI 2; ADD; GETBP;
+   CSTI 0; ADD; LDI; STI; INCSP -1; INCSP 1; GETBP; CSTI 3; ADD; CSTI 0; STI;
+   INCSP -1; GETBP; CSTI 2; ADD; LDI; CSTI 1; EQ; IFZERO "L3"; Label "L2";
+   GETBP; CSTI 3; ADD; CSTI 31; STI; INCSP -1; Label "L3"; GETBP; CSTI 2; ADD;
+   LDI; CSTI 2; EQ; IFZERO "L5"; Label "L4"; GETBP; CSTI 1; ADD; LDI; CSTI 4;
+   MOD; CSTI 0; EQ; IFZERO "L6"; GETBP; CSTI 3; ADD; CSTI 29; STI; INCSP -1;
+   GOTO "L7"; Label "L6"; INCSP 0; Label "L7"; Label "L5"; GETBP; CSTI 2; ADD;
+   LDI; CSTI 3; EQ; IFZERO "L9"; Label "L8"; GETBP; CSTI 3; ADD; CSTI 31; STI;
+   INCSP -1; Label "L9"; GETBP; CSTI 3; ADD; LDI; PRINTI; INCSP -1; INCSP -2;
+   RET 1]

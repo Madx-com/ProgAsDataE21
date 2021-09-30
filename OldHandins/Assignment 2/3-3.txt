@@ -1,0 +1,41 @@
+================ Input ================
+let z = (17) in z + 2*3 end EOF
+
+================ Dry Run ================
+
+shift 	let 					Tokenize to LET
+shift 	z 					Tokenize to NAME
+	reduce by rule B
+shift 	= 					Tokenize to EQ
+shift 	( 					Tokenize to LPAR
+shift 	17 					Tokenize to CSTINT
+shift 	) 					Tokenize to RPAR
+	reduce by rule E
+shift 	in 					Tokenize to IN
+shift 	z 					Tokenize to NAME
+	reduce by rule B
+shift 	+ 					Tokenize to PLUS
+shift 	2 					Tokenize to CSTINT
+	Look forward see * Takes precedence
+shift 	* 					Tokenize to TIMES
+shift 	3 					Tokenize to CSTINT
+	reduce by rule G
+	reduce by rule H
+shift 	end 					Tokenize to END
+	Lookforward see EOF
+	reduce by rule F
+shift 	EOF					Tokenize to EOF
+	reduce by rule A
+accept
+
+================ RULES ================
+
+Main ::= Expr EOF                           rule A
+Expr ::= NAME                               rule B
+	|CSTINT                           		rule C
+	|MINUS CSTINT                     		rule D
+	|LPAR Expr RPAR                   		rule E
+	|LET NAME EQ Expr IN Expr END     		rule F
+	|Expr TIMES Expr                  		rule G
+	|Expr PLUS Expr                  		rule H
+	|Expr MINUS Expr                  		rule I

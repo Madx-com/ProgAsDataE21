@@ -1,0 +1,12 @@
+-----
+TEST
+-----
+MicroC fil: supIfTest.c
+Parametre: int m, int n
+
+compileToFile(fromFile "supIfTest.c")"supIfTest.out";;
+val it : Machine.instr list =
+  [LDARGS; CALL (2,"L1"); STOP; Label "L1"; GETBP; CSTI 0; ADD; LDI; GETBP;
+   CSTI 1; ADD; LDI; LT; IFZERO "L2"; GETBP; CSTI 0; ADD; LDI; PRINTI;
+   GOTO "L3"; Label "L2"; GETBP; CSTI 1; ADD; LDI; PRINTI; Label "L3";
+   INCSP -1; INCSP 0; RET 1]

@@ -1,0 +1,1 @@
+fsi -r bin/FsLexYacc.Runtime.dll Absyn.fs FunPar.fs FunLex.fs Parse.fs HigherFun.fs TypeInference.fs ParseAndRunHigher.fs ParseAndType.fs

@@ -1,0 +1,33 @@
+{
+(* File RegEx/RegexLex.fsl
+   Lexer specification for the simple regular expression language.
+*)
+
+module RegexLex
+
+open Microsoft.FSharp.Text.Lexing
+open RegexPar
+
+}
+
+rule Token = parse
+  | [' ' '\t' '\r'] { Token lexbuf }
+  | '\n'            { lexbuf.EndPos <- lexbuf.EndPos.NextLine; Token lexbuf }
+  | '''             { Char lexbuf }
+  | '’'             { Char lexbuf }
+  | '*'             { TIMES }
+  | '|'             { OR    }
+  | '('             { LPAR  } 
+  | ')'             { RPAR  }
+  | "eps"           { EPS   } 
+  | 'ε'             { EPS   }
+  | eof             { EOF   }
+  | _               { failwith "Lexer error: illegal symbol" }
+
+and Char = parse
+  | ['a'-'z''A'-'Z''0'-'9'] '''
+                    { CHAR ((lexbuf.Lexeme).[0])}
+  | ['a'-'z''A'-'Z''0'-'9'] '’'
+                    { CHAR ((lexbuf.Lexeme).[0])}
+  | _               { failwith "Lexer error: not a valid char" }
+

@@ -1,0 +1,69 @@
+  public static void SelectionSort(int[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=4, args_size=1  //maximum 4 items on operand stack, 4 local variables and 1 argument
+      
+                                      (*int i = 0*)
+         0: iconst_0                  //push int constant 0 on top of the stack.     
+         1: istore_1                  //pop value from stack to local variable V_1.
+
+                                      (*i < arr.length*)
+         2: iload_1                   //load local variable V_1 onto stack. 
+         3: aload_0                   //load object reference from argument 0 onto stack.
+         4: arraylength               //load array length of argument 0 array and remove object reference from stack.
+
+         5: if_icmpge     57          //branch to 57 if V_1 is greater than or equal the array length. Remove both stack elements.
+         
+                                      (*least = i*)
+         8: iload_1                   //load local variable V_1 onto stack.
+         9: istore_2                  //pop value from stack to local variable V_2.
+
+                                      (*j = i + 1*)
+        10: iload_1                   //load local variable V_1 onto stack.
+        11: iconst_1                  //push int constant 1 on top of the stack.
+        12: iadd                      //add V_1 and 1, replace them with result on stack. '
+        13: istore_3                  //pop value from stack to local variable V_3.
+
+                                      (* j < arr.lenght *)
+        14: iload_3                   //load local variable V_3 onto stack.
+        15: aload_0                   //load object reference from argument 0 onto stack.
+        16: arraylength               //load array length of argument 0 array and remove object reference from stack.
+        17: if_icmpge     37          //branch to 37 if V_3 is greater than or equal the array length. Remove both stack elements.
+
+                                      (* if arr[j] < arr[least] *)
+        20: aload_0                   //load object reference from argument 0 onto stack.
+        21: iload_3                   //load local variable V_3 onto stack.
+        22: iaload                    //load element at index V_3 of argument 0 array and replace both stack elements with array element.
+        23: aload_0                   //load object reference from argument 0 onto stack.
+        24: iload_2                   //load local variable V_2 onto stack.
+        25: iaload                    //load element at index V_2 of argument 0 array and replace both stack elements with array element.
+        26: if_icmpge     31          //branch to 31 if element at index V_3 is greater than or equal element at index V_2 of argument 0 array. Remove both stack elements.
+
+                                      (*least = j *)
+        29: iload_3                   //load local variable V_3 onto stack.
+        30: istore_2                  //pop value from stack to local variable V_2.
+
+                                      (* j++ *)
+        31: iinc          3, 1        //increment local variable V_3 with 1.
+        34: goto          14          //branch to 14.
+
+                                      (*array hell*)
+        37: aload_0                   //load object reference from argument 0 onto stack.
+        38: iload_1                   //load local variable V_1 onto stack.
+        39: iaload                    //load element at index V_1 of argument 0 array and replace both stack elements with array element.
+        40: istore_3                  //pop value from stack to local variable V_3.
+        41: aload_0                   //load object reference from argument 0 onto stack.
+        42: iload_1                   //load local variable V_1 onto stack.
+        43: aload_0                   //load object reference from argument 0 onto stack.
+        44: iload_2                   //load local variable V_2 onto stack.
+        45: iaload                    //load element at index V_2 of argument 0 array and replace both stack elements with array element.
+        46: iastore                   //replace array element at index V_1 with array element at index V_2 of argument 0 array, and remove all three stack elements.
+        47: aload_0                   //load object reference from argument 0 onto stack.
+        48: iload_2                   //load local variable V_2 onto stack.
+        49: iload_3                   //load local variable V_3 onto stack.
+        50: iastore                   //replace array element at index V_2 with V_3 of argument 0 array, and remove all three stack elements.
+                                     
+                                      (*i++*)
+        51: iinc          1, 1        //increment local variable V_1 with 1.
+        54: goto          2           //branch to 2.
+        57: return                    //return from method.

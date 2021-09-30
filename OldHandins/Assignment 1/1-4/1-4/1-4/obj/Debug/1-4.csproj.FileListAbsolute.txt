@@ -1,0 +1,6 @@
+D:\GitHubRepoes\BPRD\Assignment 1\1-4\1-4\1-4\bin\Debug\1-4.exe.config
+D:\GitHubRepoes\BPRD\Assignment 1\1-4\1-4\1-4\obj\Debug\1-4.csprojResolveAssemblyReference.cache
+D:\GitHubRepoes\BPRD\Assignment 1\1-4\1-4\1-4\bin\Debug\1-4.exe
+D:\GitHubRepoes\BPRD\Assignment 1\1-4\1-4\1-4\bin\Debug\1-4.pdb
+D:\GitHubRepoes\BPRD\Assignment 1\1-4\1-4\1-4\obj\Debug\1-4.exe
+D:\GitHubRepoes\BPRD\Assignment 1\1-4\1-4\1-4\obj\Debug\1-4.pdb

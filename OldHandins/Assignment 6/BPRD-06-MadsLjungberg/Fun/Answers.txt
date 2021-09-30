@@ -1,0 +1,181 @@
+//------------------Exercise 6.1------------------//
+run (fromString @"let add x = let f y = x+y in f end
+in add 2 5 end");;
+(*
+run (fromString @"let add x = let f y = x+y in f end
+- in add 2 5 end");;
+val it : HigherFun.value = Int 7
+*)
+
+run (fromString @"let add x = let f y = x+y in f end
+in let addtwo = add 2
+   in addtwo 5 end
+end");;
+(*
+run (fromString @"let add x = let f y = x+y in f end
+- in let addtwo = add 2
+-    in addtwo 5 end
+- end");;
+val it : HigherFun.value = Int 7
+*)
+
+run (fromString @"let add x = let f y = x+y in f end
+in let addtwo = add 2
+   in let x = 77 in addtwo 5 end
+end end");;
+(*
+run (fromString @"let add x = let f y = x+y in f end
+- in let addtwo = add 2
+-    in let x = 77 in addtwo 5 end
+- end end");;
+val it : HigherFun.value = Int 7
+*)
+
+run (fromString @"let add x = let f y = x+y in f end
+in add 2 end");;
+(*
+> run (fromString @"let add x = let f y = x+y in f end
+- in add 2 end");;
+val it : HigherFun.value =
+  Closure
+    ("f","y",Prim ("+",Var "x",Var "y"),
+     [("x", Int 2);
+      ("add",
+       Closure
+         ("add","x",Letfun ("f","y",Prim ("+",Var "x",Var "y"),Var "f"),[]))])
+*)
+
+(*
+The result of the third one was kind of unexpected, as well as
+expected. We expected as a "possible" result of the evaluation to be 82 if the
+"in let x = 77" overwrites the "in let addtwo = add 2", however, it seems that
+was not the case.
+
+The result of the fourth one is the result of having an unbound variable in
+the equation, namely "y", as can be seen in both of the Closure's environments,
+there contains no bindings for the variable "y".
+*)
+
+//------------------Exercise 6.2------------------//
+(* Made changes in Absyn.fs, FunPar.fsy, Funlex.fsl and HigherFun.fs*)
+
+run (fromString "fun x -> 2*x");;
+run (fromString "let y = 22 in fun z -> z + y end");;
+(*
+> open ParseAndRunHigher;;
+> fromString "fun x -> 2*x";;
+val it : Absyn.expr = Fun ("x",Prim ("*",CstI 2,Var "x"))
+> fromString "let y = 22 in fun z -> z + y end";;
+val it : Absyn.expr = Let ("y",CstI 22,Fun ("z",Prim ("+",Var "z",Var "y")))
+> run (fromString "fun x -> 2*x");;
+val it : HigherFun.value = Clos ("x",Prim ("*",CstI 2,Var "x"),[])
+> run (fromString "let y = 22 in fun z -> z + y end");;
+val it : HigherFun.value =
+  Clos ("z",Prim ("+",Var "z",Var "y"),[("y", Int 22)])
+*)
+
+//------------------Exercise 6.3------------------//
+(* See exercise 6.2 *)
+
+run (fromString @"let add x = fun y -> x+y
+in add 2 5 end");;
+run (fromString @"let add = fun x -> fun y -> x+y
+in add 2 5 end");;
+(*
+> open ParseAndRunHigher;;
+> run (fromString @"let add x = fun y -> x+y
+- in add 2 5 end");;
+val it : HigherFun.value = Int 7
+> run (fromString @"let add = fun x -> fun y -> x+y
+- in add 2 5 end");;
+val it : HigherFun.value = Int 7
+*)
+
+//------------------Exercise 6.4------------------//
+(* See "Exercise 6-4.pdf" *)
+
+//------------------Exercise 6.5------------------//
+(* 1 *)
+// 1
+inferType (fromString "let f x = 1 in f f end");;
+(*
+>inferType (fromString "let f x = 1 in f f end");;
+val it : string = "int"
+*)
+
+// 2
+inferType(fromString "let f g = g g in f end");;
+(*
+> inferType(fromString "let f g = g g in f end");;
+System.Exception: type error: circularity
+  at FSI_0002.TypeInference.occurCheck[FSharpRef`1] (Microsoft.FSharp.Core.FSharpRef`1 tyvar, Microsoft.FSharp.Collections.FSharpList`1 tyvars) [0x00000] in <filename unknown>:0 
+  at FSI_0002.TypeInference.linkVarToType (Microsoft.FSharp.Core.FSharpRef`1 tyvar, FSI_0002.typ t) [0x00000] in <filename unknown>:0 
+  at FSI_0002.TypeInference.unify (FSI_0002.typ t1, FSI_0002.typ t2) [0x00000] in <filename unknown>:0 
+  at FSI_0002.TypeInference.typ (Int32 lvl, Microsoft.FSharp.Collections.FSharpList`1 env, FSI_0002.expr e) [0x00000] in <filename unknown>:0 
+  at FSI_0002.TypeInference.typ (Int32 lvl, Microsoft.FSharp.Collections.FSharpList`1 env, FSI_0002.expr e) [0x00000] in <filename unknown>:0 
+  at FSI_0002.ParseAndType+inferType@7.Invoke (FSI_0002.expr e) [0x00000] in <filename unknown>:0 
+  at <StartupCode$FSI_0006>.$FSI_0006.main@ () [0x00000] in <filename unknown>:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <filename unknown>:0 
+Stopped due to error
+*)
+
+// 3
+inferType(fromString "let f x = let g y = y in g false end in f 42 end");;
+(*
+> inferType(fromString "let f x = let g y = y in g false end in f 42 end");;
+val it : string = "bool"
+*)
+
+// 4
+inferType(fromString "let f x = let g y = if true then y else x in g false end in f 42 end");;
+(*
+> inferType(fromString "let f x = let g y = if true then y else x in g false end in f 42 end");;
+System.Exception: type error: bool and int
+  at FSI_0002.TypeInference.unify (FSI_0002.typ t1, FSI_0002.typ t2) [0x00000] in <filename unknown>:0 
+  at FSI_0002.TypeInference.unify (FSI_0002.typ t1, FSI_0002.typ t2) [0x00000] in <filename unknown>:0 
+  at FSI_0002.TypeInference.typ (Int32 lvl, Microsoft.FSharp.Collections.FSharpList`1 env, FSI_0002.expr e) [0x00000] in <filename unknown>:0 
+  at FSI_0002.ParseAndType+inferType@7.Invoke (FSI_0002.expr e) [0x00000] in <filename unknown>:0 
+  at <StartupCode$FSI_0019>.$FSI_0019.main@ () [0x00000] in <filename unknown>:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] in <filename unknown>:0 
+Stopped due to error
+*)
+
+// 5
+inferType(fromString "let f x = let g y = if true then y else x in g false end in f true end");;
+(*
+> inferType(fromString "let f x = let g y = if true then y else x in g false end i- n f true end");;
+val it : string = "bool"
+*)
+
+(*
+The result of the second program is not typeable because the function g is undefined.
+
+The forth program's result is not typeable. This is due to y being a bool and x an int.
+*)
+
+(* 2 *)
+// bool -> bool
+inferType(fromString "let f x = if x then true else false in f end");;
+
+// int -> int
+inferType(fromString "let f = let g x = x+2 in g end in f end");;
+
+// int -> (int -> int)
+inferType(fromString "let f x = let g y = x+y in g end in f end");;
+
+// 'a -> 'b -> 'a
+inferType(fromString "let f x = let g y = x in g end in f end");;
+
+// 'a -> 'b -> 'b
+inferType(fromString "let f x = let g y = y in g end in f end");;
+
+// ('a -> 'b) -> ('b -> 'c) -> ('a -> 'c)
+inferType(fromString "let c f = let b g = let annon x = g (f x) in annon end in b end in c end");;
+
+// 'a -> 'b
+inferType(fromString "let f g = f g in f end");;
+
+// 'a
+inferType(fromString "let f g = f g in f 1 end");;

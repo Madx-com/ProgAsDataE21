@@ -1,0 +1,4 @@
+As far as I can see then Head will never move anywhere since head get sat to dummy which is instantiated with -444 and Null
+This will then result in a linked list for tail that grows but never gets removed from. since put() only touches tail.
+
+this will simply fill up the memerory space and therefore end up in a fault/exception.

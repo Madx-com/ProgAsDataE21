@@ -1,0 +1,19 @@
+1) Summation of 1000 to 1..
+> let sumt = run (fromString "let sum n = if n = 0 then n else sum (n-1) + n in sum 1000 end");;
+val sumt : int = 500500
+This wont do negative numbers.
+
+2) Computing 3^8 in a naive way. with recursion.
+> let facttt = run (fromString "let fact n = if 1 = n then 3 else fact (n-1) * 3 in fact 8 end");;
+val factt : int = 6561
+
+Since the function only takes one argument 3 has to be hardcoded.
+
+3)
+> let sumfact = run (fromString "let fact n = if 1 = n then 3 else fact (n-1) * 3 in let sum g = if 0 < g then fact g + sum (g-1) else 1 in sum 11 end end");;
+val sumfact : int = 265720
+
+4)
+> let sum10fact8 = run (fromString "let sum a = if 0 < a then let pows y = if 0 < y then a * pows(y-1) else 1 in pows 8 end + sum (a-1) else 1 in sum 10 end");;
+
+val sum10fact8 : int = 167731334

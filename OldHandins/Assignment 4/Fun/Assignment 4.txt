@@ -1,0 +1,146 @@
+This spans over the task 6.1, 6.2, 6.3, 6.4 and 6.5. 
+Where 6.1 and 6.5 is answered in text here rest is implemented in code in the various files.
+
+6.1 
+	E)
+		open ParseAndRunHigher;;
+		run (fromString @"let twice f = let g x = f(f(x)) in g end in let mul3 z = z*3 in twice mul3 2 end end");;
+		
+		val it : HigherFun.value = Int 18
+		
+	1)	
+		> run (fromString"let add x = let f y = x+y in f end in add 2 5 end");;
+		
+		val it : HigherFun.value = Int 7
+	2)	
+		> run (fromString " let add x = let f y = x+y in f end in let addtwo = add 2 in
+		- addtwo 5 end end");;
+
+		val it : HigherFun.value = Int 7
+	3)
+		> run (fromString " let add x = let f y = x+y in f end in let addtwo = add 2 in
+		- let x = 77 in addtwo 5 end end end");;
+		
+		val it : HigherFun.value = Int 7
+		
+		let x = 77 Er ikke en del af funktionen add's scope.
+		
+	4)
+		> run (fromString " let add x = let f y = x+y in f end in add 2 end");;
+		
+		val it : HigherFun.value =
+		  Closure
+			("f","y",Prim ("+",Var "x",Var "y"),
+			 [("x", Int 2);
+			  ("add",
+			   Closure
+				 ("add","x",Letfun ("f","y",Prim ("+",Var "x",Var "y"),Var "f"),[]))])
+				 
+
+6.2)
+	Following files got edited:
+	Absyn.fs , FunPar.fsy, FunLex.fsl and HigherFun.fs
+	
+6.3)
+	Following files got edited:
+	FunPar.fsy and FunLex.fsl.
+	
+6.4)
+	Should be in Doc: 
+	With type trees for:
+	let f x = 1 in f f end
+	and
+	let f x = if x<10 then 42 else f(x+1) in f 20 end.
+6.5)
+
+	> inferType(fromString" let f x = 1 in f f end");;
+	val it : string = "int"
+
+	> inferType(fromString" let f g = g g in f end");;
+	System.Exception: type error: circularity
+	   ved FSI_0002.TypeInference.occurCheck[a](a tyvar, FSharpList`1 tyvars) i D:\G
+	itHubRepoes\BPRD\Assignment 4\Fun\TypeInference.fs:linje 96
+	   ved FSI_0002.TypeInference.linkVarToType(FSharpRef`1 tyvar, typ t) i D:\GitHu
+	bRepoes\BPRD\Assignment 4\Fun\TypeInference.fs:linje 112
+	   ved FSI_0002.TypeInference.unify(typ t1, typ t2) i D:\GitHubRepoes\BPRD\Assig
+	nment 4\Fun\TypeInference.fs:linje 138
+	   ved FSI_0002.TypeInference.typ(Int32 lvl, FSharpList`1 env, expr e) i D:\GitH
+	ubRepoes\BPRD\Assignment 4\Fun\TypeInference.fs:linje 256
+	   ved FSI_0002.TypeInference.typ(Int32 lvl, FSharpList`1 env, expr e) i D:\GitH
+	ubRepoes\BPRD\Assignment 4\Fun\TypeInference.fs:linje 248
+	   ved FSI_0002.ParseAndType.inferType@7.Invoke(expr e) i D:\GitHubRepoes\BPRD\A
+	ssignment 4\Fun\ParseAndType.fs:linje 7
+	   ved <StartupCode$FSI_0005>.$FSI_0005.main@()
+	Stopped due to error
+
+---	f har ingen parameter og desuden er g ikke defineret.
+	
+	> inferType(fromString" let f x = let g y = y in g false end in f 42 end");;
+	val it : string = "bool"
+
+	> inferType(fromString" let f x = let g y = if true then y else x in g false end
+	-  in f 42 end");;
+	System.Exception: type error: bool and int
+	   ved FSI_0002.TypeInference.unify(typ t1, typ t2) i D:\GitHubRepoes\BPRD\Assig
+	nment 4\Fun\TypeInference.fs:linje 141
+	   ved FSI_0002.TypeInference.unify(typ t1, typ t2) i D:\GitHubRepoes\BPRD\Assig
+	nment 4\Fun\TypeInference.fs:linje 131
+	   ved FSI_0002.TypeInference.typ(Int32 lvl, FSharpList`1 env, expr e) i D:\GitH
+	ubRepoes\BPRD\Assignment 4\Fun\TypeInference.fs:linje 256
+	   ved FSI_0002.ParseAndType.inferType@7.Invoke(expr e) i D:\GitHubRepoes\BPRD\A
+	ssignment 4\Fun\ParseAndType.fs:linje 7
+	   ved <StartupCode$FSI_0007>.$FSI_0007.main@()
+	Stopped due to error
+
+---	Et if må ikke have to forskellige retur typer 
+	
+	> inferType(fromString" let f x = let g y = if true then y else x in g false end
+	-  in f true end");;
+	val it : string = "bool"
+
+	
+	
+(6.5-2)
+=== bool -> bool ====
+inferType (fromString "let f x = if x then true else false in f end");;
+
+==== int -> int ====
+inferType (fromString "let f x = 2 + x in f end");;
+
+==== int -> int -> int =====
+inferType ( fromString "let f x = let g y = y + x in g end in f end");;
+
+==== 'a -> 'b -> 'a ====
+inferType (fromString "let f x = let g y = x in g end in f end");;
+
+==== 'a -> 'b -> 'b ====
+inferType (fromString "let f x = let g y = y in g end in f end");;
+
+==== ('a -> 'b ) -> ('b -> 'c) -> ('a -> 'c) ====
+inferType (fromString " let f g = let h i = let j k = i(g k) in j end in h end in f end");;
+
+==== 'a -> 'b ====
+inferType (fromString " let f g = f g in f end");;
+
+==== 'a ===
+inferType (fromString " let f g = f g in f 0 end");;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
