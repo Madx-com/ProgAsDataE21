@@ -1,0 +1,176 @@
+C:\...\ExprCMD\bin> fslex.exe --unicode ../ExprLex.fsl
+compiling to dfas (can take a while...)
+15 states
+writing output
+
+C:\...\ExprCMD\bin> fsyacc --module ExprPar ../ExprPar.fsy
+        building tables
+computing first function...        time: 00:00:00.0742452
+building kernels...        time: 00:00:00.0422394
+building kernel table...        time: 00:00:00.0126378
+computing lookahead relations...........................        time: 00:00:00.0251586
+building lookahead table...        time: 00:00:00.0077543
+building action table...        time: 00:00:00.0150563
+        building goto table...        time: 00:00:00.0006305
+        returning tables.
+        24 states
+        3 nonterminals
+        16 terminals
+        10 productions
+        #rows in action table: 24
+
+
+C:\...\ExprCMD> fsi -r bin\FsLexYacc.Runtime.dll Absyn.fs ExprPar.fs Exp
+rLex.fs Parse.fs
+
+Microsoft (R) F# Interactive version 4.1
+Copyright (c) Microsoft Corporation. All Rights Reserved.
+
+For help type #help;;
+
+[Loading C:\...\ExprCMD\Absyn.fs
+ Loading C:\...\ExprCMD\ExprPar.fs
+ Loading C:\...\ExprCMD\ExprLex.fs
+ Loading C:\...\ExprCMD\Parse.fs]
+namespace FSI_0002
+  type expr =
+    | CstI of int
+    | Var of string
+    | Let of string * expr * expr
+    | Prim of string * expr * expr
+
+namespace FSI_0002
+  type token =
+    | EOF
+    | LPAR
+    | RPAR
+    | END
+    | IN
+    | LET
+    | PLUS
+    | MINUS
+    | TIMES
+    | DIVIDE
+    | EQ
+    | NAME of string
+    | CSTINT of int
+  type tokenId =
+    | TOKEN_EOF
+    | TOKEN_LPAR
+    | TOKEN_RPAR
+    | TOKEN_END
+    | TOKEN_IN
+    | TOKEN_LET
+    | TOKEN_PLUS
+    | TOKEN_MINUS
+    | TOKEN_TIMES
+    | TOKEN_DIVIDE
+    | TOKEN_EQ
+    | TOKEN_NAME
+    | TOKEN_CSTINT
+    | TOKEN_end_of_input
+    | TOKEN_error
+  type nonTerminalId =
+    | NONTERM__startMain
+    | NONTERM_Main
+    | NONTERM_Expr
+  val tagOfToken : t:token -> int
+  val tokenTagToTokenId : tokenIdx:int -> tokenId
+  val prodIdxToNonTerminal : prodIdx:int -> nonTerminalId
+  val _fsyacc_endOfInputTag : int
+  val _fsyacc_tagOfErrorTerminal : int
+  val token_to_string : t:token -> string
+  val _fsyacc_dataOfToken : t:token -> System.Object
+  val _fsyacc_gotos : uint16 []
+  val _fsyacc_sparseGotoTableRowOffsets : uint16 []
+  val _fsyacc_stateToProdIdxsTableElements : uint16 []
+  val _fsyacc_stateToProdIdxsTableRowOffsets : uint16 []
+  val _fsyacc_action_rows : int
+  val _fsyacc_actionTableElements : uint16 []
+  val _fsyacc_actionTableRowOffsets : uint16 []
+  val _fsyacc_reductionSymbolCounts : uint16 []
+  val _fsyacc_productionToNonTerminalTable : uint16 []
+  val _fsyacc_immediateActions : uint16 []
+  val _fsyacc_reductions : unit -> (Text.Parsing.IParseState -> obj) []
+  val tables : unit -> Text.Parsing.Tables<token>
+  val engine :
+    lexer:(Text.Lexing.LexBuffer<'a> -> token) ->
+      lexbuf:Text.Lexing.LexBuffer<'a> -> startState:int -> obj
+  val Main :
+    lexer:(Text.Lexing.LexBuffer<'a> -> token) ->
+      lexbuf:Text.Lexing.LexBuffer<'a> -> Absyn.expr
+
+namespace FSI_0002
+  val lexemeAsString : lexbuf:Text.Lexing.LexBuffer<char> -> string
+  val keyword : s:string -> ExprPar.token
+  val trans : uint16 [] array
+  val actions : uint16 []
+  val _fslex_tables : Text.Lexing.UnicodeTables
+  val _fslex_dummy : unit -> 'a
+  val Token : lexbuf:Text.Lexing.LexBuffer<char> -> ExprPar.token
+  val _fslex_Token :
+    _fslex_state:int -> lexbuf:Text.Lexing.LexBuffer<char> -> ExprPar.token
+
+namespace FSI_0002
+  val fromString : str:string -> Absyn.expr
+  val fromFile : filename:string -> Absyn.expr
+  
+> open Parse;;
+> fromString "1 + 2 * 3";;
+val it : Absyn.expr = Prim ("+",CstI 1,Prim ("*",CstI 2,CstI 3))
+
+> fromString "1 - 2 - 3";;
+val it : Absyn.expr = Prim ("-",Prim ("-",CstI 1,CstI 2),CstI 3)
+
+> fromString "1 + -2";;
+val it : Absyn.expr = Prim ("+",CstI 1,CstI -2)
+
+> fromString "x++";;
+System.Exception: parse error near line 1, column 3
+
+   ved Microsoft.FSharp.Core.PrintfModule.PrintFormatToStringThenFail@1349.Invoke(String message)
+   ved FSI_0002.Parse.fromString(String str) i C:\...\ExprCMD\Parse.fs:linje 20
+   ved <StartupCode$FSI_0007>.$FSI_0007.main@()
+Stopped due to error
+> fromString "1 + 1.2";;
+System.Exception: Lexer error: illegal symbol near line 1, column 6
+
+   ved Microsoft.FSharp.Core.PrintfModule.PrintFormatToStringThenFail@1349.Invoke(String message)
+   ved FSI_0002.Parse.fromString(String str) i C:\...\ExprCMD\Parse.fs:linje 20
+   ved <StartupCode$FSI_0008>.$FSI_0008.main@()
+Stopped due to error
+> fromString "1 + ";;
+System.Exception: parse error near line 1, column 4
+
+   ved Microsoft.FSharp.Core.PrintfModule.PrintFormatToStringThenFail@1349.Invoke(String message)
+   ved FSI_0002.Parse.fromString(String str) i C:\...\ExprCMD\Parse.fs:linje 20
+   ved <StartupCode$FSI_0009>.$FSI_0009.main@()
+Stopped due to error
+
+> fromString "let z = (17) in z + 2 * 3 end";;
+val it : Absyn.expr =
+  Let ("z",CstI 17,Prim ("+",Var "z",Prim ("*",CstI 2,CstI 3)))
+
+> fromString "let z = 17) in z + 2 * 3 end";;
+System.Exception: parse error near line 1, column 11
+
+   ved Microsoft.FSharp.Core.PrintfModule.PrintFormatToStringThenFail@1349.Invoke(String message)
+   ved FSI_0002.Parse.fromString(String str) i C:\...\ExprCMD\Parse.fs:linje 20
+   ved <StartupCode$FSI_0011>.$FSI_0011.main@()
+Stopped due to error
+> fromString " let in = (17) in z + 2 * 3 end";;
+System.Exception: parse error near line 1, column 7
+
+   ved Microsoft.FSharp.Core.PrintfModule.PrintFormatToStringThenFail@1349.Invoke(String message)
+   ved FSI_0002.Parse.fromString(String str) i C:\...\ExprCMD\Parse.fs:linje 20
+   ved <StartupCode$FSI_0012>.$FSI_0012.main@()
+Stopped due to error
+> fromString "1 + let x=5 in let y=7+x in y+y end + x end";;
+val it : Absyn.expr =
+  Prim
+    ("+",CstI 1,
+     Let
+       ("x",CstI 5,
+        Prim
+          ("+",Let ("y",Prim ("+",CstI 7,Var "x"),Prim ("+",Var "y",Var "y")),
+           Var "x")))

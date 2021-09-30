@@ -1,0 +1,3 @@
+compiling to dfas (can take a while...)
+30 states
+writing output

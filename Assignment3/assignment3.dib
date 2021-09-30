@@ -1,0 +1,111 @@
+#!markdown
+
+PLC: 4.1, 4.2, 4.3, 4.4 and 4.5
+
+#!csharp
+
+using System.Diagnostics;
+
+class Program
+{
+    /// <summary>
+    /// Launch the application with some options set.
+    /// </summary>
+    public static void LaunchCommandLineApp()
+    {
+        // Use ProcessStartInfo class
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+        startInfo.CreateNoWindow = false;
+        startInfo.UseShellExecute = true;
+        startInfo.FileName = "compLexPar.sh";
+        startInfo.WindowStyle = ProcessWindowStyle.Normal;
+        startInfo.WorkingDirectory = "C:\\Users\\Madxc\\Desktop\\ProgasDataE20\\Assignment3\\Fun";
+
+
+        try
+        {
+            // Start the process with the info we specified.
+            // Call WaitForExit and then the using statement will close.
+            using (Process exeProcess = Process.Start(startInfo))
+            {
+                
+                exeProcess.WaitForExit();
+                //exeProcess.WaitForInputIdle();
+            }
+        }
+        catch(Exception ex)
+        {
+           Console.Out.WriteLine(ex.ToString()); 
+             // Log error.
+        }
+    }
+}
+
+Program.LaunchCommandLineApp()
+
+#!fsharp
+
+#r "nuget:FsLexYacc,10.0.0"
+//#r "nuget:FsLexYacc.Runtime"
+//#r "nuget:FSharp.Text.Parsing"
+
+//open Parsing
+#load "Fun\Absyn.fs"
+#load "Fun\FunPar.fs"
+#load "Fun\FunLex.fs"
+#load "Fun\Parse.fs"
+//dotnet.myget.org/F/dotnet-try/api/v3/index.json
+
+#!fsharp
+
+#r "nuget:FsLexYacc,10.0.0"
+#r "nuget:FsLexYacc.Runtime"
+
+#load "Fun\Absyn.fs"
+#load "Fun\FunPar.fs"
+#load "Fun\FunLex.fs"
+#load "Fun\Parse.fs"
+//dotnet.myget.org/F/dotnet-try/api/v3/index.json
+open Parse
+
+printf "%O" e1
+
+#!markdown
+
+4.1 
+Get archive fun.zip from the homepage and unpack to directory Fun.
+it contains lexer and parser specifications and interpreter for a small first-order functional language.
+Generate and comile the lecer and parser as described in README.TXT; parse and run some example programs with ParseAndRun.fs.
+
+4.2
+Write more example programs in the functional language, and test them in the same way as in Exercise 4.1:
+    - Compute the sum of the numbers from 1000 down to 1. Do this by defining a function sum n that computes the sum n + (n - 1) + (n - 2) + ... + 2 + 1. (Use straight forward summation, no clever tricks).
+    - Compute the number 3^8, that is, 3 raised to the power 8. Again use a recursive function.
+    - Compute 3^0 + 3^1 + ... + 3^10 + 3^11, using a recursive function (or two, if you prefer).
+    - Compute 1^8 + 2^8 + ... + 10^8, again using a recursive function (or two).
+
+4.3
+For simplicity, the current implementation of the functional language requires all functions to take exactly one argument. 
+This seriously limits the programs that can bewritten in the language (at least it limits what can be written without excessive cleverness and complications).
+Modify the language to allow functions to take one or more arguments. Start by modifying the abstract syntax in Absyn.fs to permit a list of parameter names in Letfun and a list of argument expressions in Call.
+The modify the eval interpreter in file Fun.fs to work for the new abstract syntax.
+You must modify the closure representation to accommodate a list of parameters. Also , modify the Letfun and Call clauses of the interpreter. You will need a way to zip together a list of varible names and a list of varible values, to get an environment in the for of an association list; so function List.zip might be usefull.
+
+4.4
+In continuation of exercise 4.3, modify the parser spec to accept a language where functions may take any non-zero nu
+mber of arguments. The resulting parser should permit function declarations such as these.
+
+\begin{lstlisting}
+let pow x n = if n=0 then 1 else x* pow x (n-1) in pow 3 8 end
+
+let max2 a b = if a<b then b alse a
+in let max3 a b c = max2 a (max b c)
+    in let max3 25 6 62 end
+end
+\end{lstlisting}
+
+You may want to define non-empty parameter lists and argument lists in analogy with the Namesl nonterminal from Usg1/sqlParse.day, except that the parameters should not be separated by commas. Note that multi-argument applications such as f a b are already permitted by the existing grammar, but they would produce abstract syntax of the form Cal1 (Call (Var "f", Var "a"), Var "b") which the Fun.eval function does not understand. You need to modify the AppExpr nonterminal and its semantic action to produce Call (Var "f", [Var
+
+"a"; Var "b"]) instead.
+
+Exercise 4.5 Extend the (untyped) functional language with infix operator "&&" meaning sequential logical "and" and infix operator "1" meaning sequential logical "or", as in C, C++, Java, C#, or F#. Note that el && e2 can be encoded as if el then e2 else false and that e1 || e2 can be encoded as if el then true else e2. Hence you need only change the lexer and parser specifications, and make the new rules in the parser specification generate the appropriate abstract syntax. You need not change Absyn.fs or Fun.fs.

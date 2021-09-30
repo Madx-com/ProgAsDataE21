@@ -1,0 +1,32 @@
+        building tables
+computing first function...        time: 00:00:00.0633775
+building kernels...        time: 00:00:00.0379425
+building kernel table...        time: 00:00:00.0108117
+computing lookahead relations.............................................................        time: 00:00:00.0262071
+building lookahead table...        time: 00:00:00.0069836
+building action table...        shift/reduce error at state 21 on terminal GT between {[explicit nonassoc 9997] shift(37)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 21 on terminal LT between {[explicit nonassoc 9997] shift(38)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 21 on terminal GE between {[explicit nonassoc 9997] shift(39)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 21 on terminal LE between {[explicit nonassoc 9997] shift(40)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 22 on terminal GT between {[explicit nonassoc 9997] shift(37)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 22 on terminal LT between {[explicit nonassoc 9997] shift(38)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 22 on terminal GE between {[explicit nonassoc 9997] shift(39)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 22 on terminal LE between {[explicit nonassoc 9997] shift(40)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LT' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 23 on terminal GT between {[explicit nonassoc 9997] shift(37)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 23 on terminal LT between {[explicit nonassoc 9997] shift(38)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 23 on terminal GE between {[explicit nonassoc 9997] shift(39)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 23 on terminal LE between {[explicit nonassoc 9997] shift(40)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'GE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 24 on terminal GT between {[explicit nonassoc 9997] shift(37)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 24 on terminal LT between {[explicit nonassoc 9997] shift(38)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 24 on terminal GE between {[explicit nonassoc 9997] shift(39)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LE' Expr)} - assuming the former because we prefer shift on equal precedences
+        shift/reduce error at state 24 on terminal LE between {[explicit nonassoc 9997] shift(40)} and {[explicit nonassoc 9997] reduce(Expr:Expr 'LE' Expr)} - assuming the former because we prefer shift on equal precedences
+        time: 00:00:00.0481780
+        building goto table...        time: 00:00:00.0006487
+        returning tables.
+        16 shift/reduce conflicts
+        consider setting precedences explicitly using %left %right and %nonassoc on terminals and/or setting explicit precedence on rules using %prec
+        58 states
+        6 nonterminals
+        29 terminals
+        26 productions
+        #rows in action table: 58
